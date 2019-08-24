@@ -6,6 +6,22 @@ import numpy as np
 from api import ping_response, start_response, move_response, end_response
 
 
+def IsInBounds(coord, min_val, max_val):
+    return (min_val <= coord[0] < max_val) and (min_val <= coord[1] < max_val)
+
+
+def GetDir(to_coord, from_coord):
+    diff = tuple(np.subtract(to_coord, from_coord))
+    if(diff == (0, -1)):
+        return 'up'
+    elif (diff == (0, 1)):
+        return 'down'
+    elif (diff == (-1, 0)):
+        return 'left'
+    else:
+        return 'right'
+
+
 @bottle.route('/')
 def index():
     return '''
@@ -39,7 +55,7 @@ def start():
     print('in start------------------------------------------------------')
     data = bottle.request.json
 
-    print(json.dumps(data))
+    # print(json.dumps(data))
 
     color = "#736CCB"
 
@@ -77,7 +93,22 @@ def move():
     for limb in me:
         board[limb['y'], limb['x']] = -1
 
-    print(board)
+    possible_coords = []
+
+    for i in [-1, 1]:
+        possible_coords.append((me[0]['y'] + i, me[0]['x']))
+        possible_coords.append((me[0]['y'], me[0]['x'] + i))
+    possible_coords = [i for i in possible_coords if IsInBounds(i, 0, width)]
+    possible_moves = []
+
+    for p in possible_coords:
+        possible_moves.append(
+            {'dir': GetDir(p, (me[0]['y'], me[0]['x'])), 'score': board[p]})
+    possible_moves = sorted(
+        possible_moves, key=lambda i: i['score'], reverse=True)
+    print(possible_moves)
+    return possible_moves[0]['dir']
+    # print(board)
 
 
 @bottle.post('/end')
@@ -88,7 +119,7 @@ def end():
     TODO: If your snake AI was stateful,
         clean up any stateful objects here.
     """
-    print(json.dumps(data))
+    # print(json.dumps(data))
 
     return end_response()
 
