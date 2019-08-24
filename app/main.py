@@ -4,12 +4,16 @@ import bottle
 import numpy as np
 import random
 
-from api.api import ping_response, start_response, move_response, end_response
+from api import ping_response, start_response, move_response, end_response
 from random import *
 
 def IsInBounds(coord, min_val, max_val):
     return (min_val <= coord[0] < max_val) and (min_val <= coord[1] < max_val)
 
+def GetManhatten(p1, p2):
+    print(p1)
+    print(p2)
+    return abs((p1[0] - p2[0]) + (p1[1] - p2[1]))
 
 def GetDir(to_coord, from_coord):
     diff = tuple(np.subtract(to_coord, from_coord))
@@ -22,6 +26,11 @@ def GetDir(to_coord, from_coord):
     else:
         return 'right'
 
+def ToFood(start, food):
+    if food[1] > start[1]:
+        return 'right'
+    elif food[1] < start[1]:
+        return 'left'
 
 @bottle.route('/')
 def index():
@@ -85,11 +94,16 @@ def move():
                 board[(s[0], s[1]-1)] = 0
             board[s] = 0
     food = [(d['y'], d['x']) for d in food]
+    foodDistances = {}
+
     for f in food:
         board[f] = 3
+        foodDistances[f] = GetManhatten((me[0]['y'], me[0]['x']), f)
 
     head = me[0]
     neck = me[1]
+
+    print(foodDistances)
 
     direction = (head['x'] - neck['x'], head['y'] - neck['y'])
 
@@ -114,6 +128,8 @@ def move():
             {'dir': GetDir(p, (me[0]['y'], me[0]['x'])), 'score': board[p]})
     possible_moves = sorted(
         possible_moves, key=lambda i: i['score'], reverse=True)
+
+
 
     if(possible_moves[0]['score'] == possible_moves[1]['score'] and possible_moves[1]['score'] == possible_moves[2]['score']):
         return move_response(possible_moves[randint(0,2)]['dir'])
