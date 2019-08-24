@@ -6,12 +6,14 @@ import numpy as np
 
 from api import ping_response, start_response, move_response, end_response
 
+
 @bottle.route('/')
 def index():
     return '''
     Battlesnake documentation can be found at
        <a href="https://docs.battlesnake.io">https://docs.battlesnake.io</a>.
     '''
+
 
 @bottle.route('/static/<path:path>')
 def static(path):
@@ -23,6 +25,7 @@ def static(path):
     """
     return bottle.static_file(path, root='static/')
 
+
 @bottle.post('/ping')
 def ping():
     """
@@ -31,11 +34,11 @@ def ping():
     """
     return ping_response()
 
+
 @bottle.post('/start')
 def start():
     print('in start------------------------------------------------------')
     data = bottle.request.json
-
 
     print(json.dumps(data))
 
@@ -51,7 +54,7 @@ def move():
     print('turn --------------------------------------------------------')
     data = bottle.request.json
 
-    #Variable initalization
+    # Variable initalization
     width = data['board']['width']
     height = data['board']['height']
     board = np.full((width + 1, height + 1), 2)
@@ -61,13 +64,11 @@ def move():
     neckX = int(json.dumps(data['you']['body'][1]['x']), 10) + 1
     neckY = int(json.dumps(data['you']['body'][1]['y']), 10) + 1
 
-
-    #set edge values to zero so we dont move there
+    # set edge values to zero so we dont move there
     board[:, 0] = 0
     board[0, :] = 0
     board[:, height] = 0
     board[width, :] = 0
-
 
     def lookFoward(head, neck):
         if (head[1] == neck[1]) and (head[0] < neck[0]):
@@ -107,7 +108,7 @@ def move():
 
     def lookLeft(head, neck):
         if (head[1] == neck[1]) and (head[0] < neck[0]):
-            forwardGridVal = board[head[0], head[1] -1].item()
+            forwardGridVal = board[head[0], head[1] - 1].item()
             direction = 'left'
             return forwardGridVal, direction
         elif (head[1] == neck[1]) and (head[0] > neck[0]):
@@ -122,7 +123,6 @@ def move():
             forwardGridVal = board[head[0] - 1, head[1]].item()
             direction = 'down'
             return forwardGridVal, direction
-
 
     print(data['turn'])
     print('----------------------------------------------')
@@ -152,6 +152,7 @@ def end():
     print(json.dumps(data))
 
     return end_response()
+
 
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
