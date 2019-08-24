@@ -86,6 +86,9 @@ def move():
     food = data['board']['food']
     snakes = data['board']['snakes']
 
+    for f in food:
+        board[f] = 3
+
     if len(snakes) > 0:
         snakes = ([(d['y'], d['x']) for dd in snakes if dd['id']
                    != data['you']['id'] for d in dd['body']])
@@ -100,9 +103,6 @@ def move():
                         board[new_coord] = 0
             board[s] = 0
     food = [(d['y'], d['x']) for d in food]
-
-    for f in food:
-        board[f] = 3
 
     head = me[0]
     neck = me[1]
