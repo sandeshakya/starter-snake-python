@@ -2,11 +2,10 @@ import json
 import os
 import bottle
 import numpy as np
+import random
 
-from api import ping_response, start_response, move_response, end_response
-from app.pathfinding.core.diagonal_movement import DiagonalMovement
-from app.pathfinding.core.grid import Grid
-from app.pathfinding.finder.a_star import AStarFinder
+from app.api import ping_response, start_response, move_response, end_response
+from random import *
 
 def IsInBounds(coord, min_val, max_val):
     return (min_val <= coord[0] < max_val) and (min_val <= coord[1] < max_val)
@@ -14,11 +13,11 @@ def IsInBounds(coord, min_val, max_val):
 
 def GetDir(to_coord, from_coord):
     diff = tuple(np.subtract(to_coord, from_coord))
-    if(diff == (0, -1)):
+    if(diff == (-1, 0)):
         return 'up'
-    elif (diff == (0, 1)):
+    elif (diff == (1, 0)):
         return 'down'
-    elif (diff == (-1, 0)):
+    elif (diff == (0, -1)):
         return 'left'
     else:
         return 'right'
@@ -118,9 +117,14 @@ def move():
             {'dir': GetDir(p, (me[0]['y'], me[0]['x'])), 'score': board[p]})
     possible_moves = sorted(
         possible_moves, key=lambda i: i['score'], reverse=True)
+    print(board)
     print(possible_moves)
-    return possible_moves[0]['dir']
-    # print(board)
+
+    if(possible_moves[0]['score'] == possible_moves[1]['score'] and possible_moves[1]['score'] == possible_moves[2]['score']):
+        return move_response(possible_moves[randint(0,2)]['dir'])
+    else:
+        return move_response(possible_moves[0]['dir'])
+
 
 
 @bottle.post('/end')
