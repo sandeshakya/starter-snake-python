@@ -4,7 +4,7 @@ import bottle
 import numpy as np
 import random
 
-from app.api import ping_response, start_response, move_response, end_response
+from api.api import ping_response, start_response, move_response, end_response
 from random import *
 
 def IsInBounds(coord, min_val, max_val):
@@ -53,21 +53,18 @@ def ping():
 
 @bottle.post('/start')
 def start():
-    print('in start------------------------------------------------------')
     data = bottle.request.json
 
     # print(json.dumps(data))
 
     color = "#736CCB"
 
-    print('exiting start------------------------------------------------')
-
     return start_response(color)
 
 
 @bottle.post('/move')
 def move():
-    print('turn --------------------------------------------------------')
+
     data = bottle.request.json
 
     me = data['you']['body']
@@ -117,8 +114,6 @@ def move():
             {'dir': GetDir(p, (me[0]['y'], me[0]['x'])), 'score': board[p]})
     possible_moves = sorted(
         possible_moves, key=lambda i: i['score'], reverse=True)
-    print(board)
-    print(possible_moves)
 
     if(possible_moves[0]['score'] == possible_moves[1]['score'] and possible_moves[1]['score'] == possible_moves[2]['score']):
         return move_response(possible_moves[randint(0,2)]['dir'])
