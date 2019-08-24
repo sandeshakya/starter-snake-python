@@ -64,7 +64,6 @@ def move():
     for limb in me:
         board[limb['y'], limb['x']] = 0
 
-    print(board)
 
 
 
