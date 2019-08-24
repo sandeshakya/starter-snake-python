@@ -68,10 +68,19 @@ def move():
     for f in food:
         board[f] = 3
 
+    head = me[0]
+    neck = me[1]
+
+    direction = (head['x'] - neck['x'], head['y'] - neck['y'])
+
+    meX = []
+    meY = []
+
     for limb in me:
         board[limb['y'], limb['x']] = -1
+        meX.append(limb['x'])
+        meY.append(limb['y'])
 
-    
 
     print(board)
 
