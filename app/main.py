@@ -54,15 +54,12 @@ def move():
     data = bottle.request.json
 
     me = data['you']['body']
-
-    # Variable initalization
-
     width = data['board']['width']
     height = data['board']['height']
     board = np.full((width, height), 2)
     food = data['board']['food']
     snakes = data['board']['snakes']
-    # print(snakes)
+
     if len(snakes) > 0:
         snakes = ([(d['y'], d['x']) for dd in snakes if dd['id']
                    != data['you']['id'] for d in dd['body']])
@@ -78,7 +75,8 @@ def move():
         board[f] = 3
 
     for limb in me:
-        board[limb['y'], limb['x']] = 0
+        board[limb['y'], limb['x']] = -1
+
     print(board)
 
 
