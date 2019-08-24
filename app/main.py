@@ -61,8 +61,14 @@ def move():
     snakes = data['board']['snakes']
 
     if len(snakes) > 0:
-        snakes = ([(d['y'], d['x']) for dd in snakes for d in dd['body']])
+        snakes = ([(d['y'], d['x']) for dd in snakes if dd['id']
+                   != data['you']['id'] for d in dd['body']])
         for s in snakes:
+            if s == snakes[0]:
+                board[(s[0]+1, s[1])] = 0
+                board[(s[0]-1, s[1])] = 0
+                board[(s[0], s[1]+1)] = 0
+                board[(s[0], s[1]-1)] = 0
             board[s] = 0
     food = [(d['y'], d['x']) for d in food]
     for f in food:
@@ -82,7 +88,6 @@ def move():
         meY.append(limb['y'])
 
 
-    print(board)
 
 
 @bottle.post('/end')
