@@ -1,6 +1,5 @@
 import json
 import os
-import random
 import bottle
 import numpy as np
 
@@ -54,6 +53,8 @@ def move():
     print('turn --------------------------------------------------------')
     data = bottle.request.json
 
+    me = data['you']['body']
+
     # Variable initalization
 
     width = data['board']['width']
@@ -76,6 +77,11 @@ def move():
     neckX = int(json.dumps(data['you']['body'][1]['x']), 10) + 1
     neckY = int(json.dumps(data['you']['body'][1]['y']), 10) + 1
     # print(board)
+
+    board = np.full((width + 1, height + 1), 2)
+
+    for limb in me:
+        board[limb['y'], limb['x']] = 0
 
 
 @bottle.post('/end')
