@@ -4,8 +4,9 @@ import bottle
 import numpy as np
 import random
 
-from api.api import ping_response, start_response, move_response, end_response
+from app.api import ping_response, start_response, move_response, end_response
 from random import *
+
 
 def IsInBounds(coord, min_val, max_val):
     return (min_val <= coord[0] < max_val) and (min_val <= coord[1] < max_val)
@@ -116,10 +117,9 @@ def move():
         possible_moves, key=lambda i: i['score'], reverse=True)
 
     if(possible_moves[0]['score'] == possible_moves[1]['score'] and possible_moves[1]['score'] == possible_moves[2]['score']):
-        return move_response(possible_moves[randint(0,2)]['dir'])
+        return move_response(possible_moves[randint(0, 2)]['dir'])
     else:
         return move_response(possible_moves[0]['dir'])
-
 
 
 @bottle.post('/end')
