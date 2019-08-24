@@ -62,7 +62,7 @@ def move():
     board = np.full((width + 1, height + 1), 2)
 
     for limb in me:
-        board[limb['y'], limb['x']] = 0
+        board[limb['y'], limb['x']] = -1
 
 
 
