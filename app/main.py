@@ -1,10 +1,9 @@
 import json
 import os
-import random
 import bottle
 import numpy as np
 
-from app.api import ping_response, start_response, move_response, end_response
+from api import ping_response, start_response, move_response, end_response
 
 
 @bottle.route('/')
@@ -54,15 +53,20 @@ def move():
     print('turn --------------------------------------------------------')
     data = bottle.request.json
 
+    me = data['you']['body']
+
     # Variable initalization
     width = data['board']['width']
     height = data['board']['height']
-    board = np.full((width + 1, height + 1), 2)
-    headX = int(json.dumps(data['you']['body'][0]['x']), 10) + 1
-    headY = int(json.dumps(data['you']['body'][0]['y']), 10) + 1
 
-    neckX = int(json.dumps(data['you']['body'][1]['x']), 10) + 1
-    neckY = int(json.dumps(data['you']['body'][1]['y']), 10) + 1
+    board = np.full((width + 1, height + 1), 2)
+
+    for limb in me:
+        board[limb['y'], limb['x']] = 0
+
+    print(board)
+
+
 
     
 
