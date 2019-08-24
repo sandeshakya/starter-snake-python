@@ -1,7 +1,7 @@
 {
-  "name": "BattleSnake Python",
+  "name": "Snake Gyllenhaal",
   "description": "A simple BattleSnake AI written in Python.",
   "repository": "https://github.com/sendwithus/battlesnake-python",
   "website": "http://battlesnake.io",
-  "keywords": ["battlesnake","sendwithus"]
+  "keywords": ["battlesnake", "sendwithus"]
 }
