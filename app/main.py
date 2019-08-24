@@ -4,7 +4,9 @@ import bottle
 import numpy as np
 
 from api import ping_response, start_response, move_response, end_response
-
+from app.pathfinding.core.diagonal_movement import DiagonalMovement
+from app.pathfinding.core.grid import Grid
+from app.pathfinding.finder.a_star import AStarFinder
 
 @bottle.route('/')
 def index():
