@@ -4,7 +4,7 @@ import bottle
 import numpy as np
 import random
 
-from api import ping_response, start_response, move_response, end_response
+from app.api import ping_response, start_response, move_response, end_response
 from random import *
 
 
